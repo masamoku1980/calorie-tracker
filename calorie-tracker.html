@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カロリー差分チェッカー</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .result-label {
+            color: #666;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .positive {
+            color: #10b981;
+        }
+
+        .negative {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📊 カロリー差分チェッカー</h1>
+            
+            <div class="input-group">
+                <label for="weight">体重 (kg)</label>
+                <input type="number" id="weight" step="0.1" placeholder="例: 65.5">
+            </div>
+
+            <div class="input-group">
+                <label for="calories">摂取カロリー (kcal)</label>
+                <input type="number" id="calories" step="1" placeholder="例: 2000">
+            </div>
+
+            <button class="btn" onclick="calculate()">計算して記録</button>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const calories = parseFloat(document.getElementById('calories').value);
+
+            if (isNaN(weight) || isNaN(calories)) {
+                alert('体重と摂取カロリーを入力してください');
+                return;
+            }
+
+            const target = weight * 34;
+            const diff = target - calories;
+
+            // 結果を表示
+            const resultHTML = `
+                <div class="result">
+                    <div class="result-item">
+                        <span class="result-label">体重 × 34</span>
+                        <span class="result-value">${target.toFixed(0)} kcal</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">摂取カロリー</span>
+                        <span class="result-value">${calories.toFixed(0)} kcal</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">差分</span>
+                        <span class="result-value ${diff >= 0 ? 'positive' : 'negative'}">
+                            ${diff >= 0 ? '+' : ''}${diff.toFixed(0)} kcal
+                        </span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
